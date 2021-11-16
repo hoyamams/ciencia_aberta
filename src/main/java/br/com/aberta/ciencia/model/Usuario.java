@@ -1,17 +1,22 @@
 package br.com.aberta.ciencia.model;
 
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 
 @Document(collection = "Usuario")
 public class Usuario {
@@ -28,7 +33,6 @@ public class Usuario {
 	private String nomeUsuario;
 	
 	@NotBlank
-	@Indexed(unique = true)
 	@Size(max = 100)
 	private String emailUsuario;
 	
@@ -37,8 +41,7 @@ public class Usuario {
 	@Size(max = 100)
 	private String instituicaoUsuario;
 	
-	@NotBlank
-	@Size(max=50)
+	
 	private String senhaUsuario;
 	
 	private String ocupacaoUsuario;
@@ -53,12 +56,13 @@ public class Usuario {
 	@CreatedDate
 	private Date dataAlteracaoUsuario;
 	
-	private TipoUsuario tipoUsuario;
 	
-	
-//	private boolean logadoUsuario;
-	
-	public Usuario(){}
+	private int tipoUsuario ;
+
+	public Usuario() {
+	}
+
+
 
 	public Usuario(String nomeUsuario, String emailUsuario, String instituicaoUsuario,String senhaUsuario, String ocupacaoUsuario, boolean permissaoDivulgacaoDadosUsuario,
 			Date dataCadastroUsuario, Date dataAlteracaoUsuario, TipoUsuario tipoUsuario) {
@@ -70,10 +74,8 @@ public class Usuario {
         this.permissaoDivulgacaoDadosUsuario = permissaoDivulgacaoDadosUsuario;
         this.dataCadastroUsuario = dataCadastroUsuario;
         this.dataAlteracaoUsuario = dataAlteracaoUsuario;
-        this.tipoUsuario = tipoUsuario;
-       // this.logadoUsuario = logadoUsuario;
+        this.tipoUsuario = tipoUsuario.getCodigoTipoUsuario();
     }
-	
 
 	public long getId() {
 		return id;
@@ -149,34 +151,14 @@ public class Usuario {
 		this.dataAlteracaoUsuario = dataAlteracaoUsuario;
 	}
 	
-	public TipoUsuario getTipoUsuario() {
+	public int getTipoUsuario() {
 		return tipoUsuario;
 	}
-
-	public void setTipoUsuario(TipoUsuario tipoUsuario) {
+	
+	
+	public void setTipoUsuario(int tipoUsuario) {
 		this.tipoUsuario = tipoUsuario;
 	}
-	
-	
-	
-	/*public boolean isLogadoUsuario() {
-		return logadoUsuario;
-	}
-
-	public void setLogadoUsuario(boolean logadoUsuario) {
-		this.logadoUsuario = logadoUsuario;
-	}
-
-	@Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Usuario)) return false;
-        Usuario usuario = (Usuario) o;
-        return Objects.equals(emailUsuario, usuario.emailUsuario) &&
-                Objects.equals(senhaUsuario, usuario.senhaUsuario);
-    }, logadoUsuario=" + logadoUsuario + "
-*/
-
 	
 	@Override
 	public String toString() {

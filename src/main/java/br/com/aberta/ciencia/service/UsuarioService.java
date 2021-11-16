@@ -1,14 +1,20 @@
 package br.com.aberta.ciencia.service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
-import javax.validation.Valid;
-
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.message.StringFormattedMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import br.com.aberta.ciencia.exception.ResourceNotFoundException;
@@ -16,23 +22,62 @@ import br.com.aberta.ciencia.model.TipoUsuario;
 import br.com.aberta.ciencia.model.Usuario;
 import br.com.aberta.ciencia.repository.UsuarioRepository;
 
+
+
+//@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
+@RequiredArgsConstructor
+@Transactional
+@Slf4j
 @Service
-@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
-public class UsuarioService{
-	
+public class UsuarioService implements UserDetailsService {
 	@Autowired
 	private SequenceGeneratorService sequenceGeneratorService;
-	
+
 	@Autowired
 	private UsuarioRepository usuarioRepository;
-	
+
+
+	private TipoUsuario tipoUsuario;
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
 	public UsuarioService(UsuarioRepository usuarioRepository) {
 		this.usuarioRepository = usuarioRepository;
 	}
-	
+
+	@Override
+	public UserDetails loadUserByUsername(String emailUsuario) throws UsernameNotFoundException {
+		Usuario usuario = usuarioRepository.findByEmailUsuario(emailUsuario);
+		if (usuario==null){
+			log.error("User not found in the database");
+			throw new UsernameNotFoundException("User not found in the database");
+		}else{
+			log.info("User found in the database:{}",emailUsuario);
+		}
+		//int permissao= usuario.getTipoUsuario();
+		Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+		authorities.add(new SimpleGrantedAuthority(TipoUsuario.COMUM.getDescricaoTipoUsuario()));
+
+		return new User(usuario.getEmailUsuario(),usuario.getSenhaUsuario(),authorities);
+	}
+
+
+	/* Salva cadastro usuario */
+	public Usuario save(Usuario usuario) {
+
+		usuario.setId(sequenceGeneratorService.generateSequence(Usuario.SEQUENCE_NAME));
+		usuario.setDataCadastroUsuario(new Date());
+		usuario.setTipoUsuario(TipoUsuario.COMUM.getCodigoTipoUsuario());
+		usuario.setSenhaUsuario(passwordEncoder.encode(usuario.getSenhaUsuario()));
+		return usuarioRepository.save(usuario);
+	}
+
+	public Usuario getUsuario(String emailUsuario) {
+		return usuarioRepository.findByEmailUsuario(emailUsuario);
+	}
+
+
 	/* Busca por todos os usuario */
 	public List<Usuario> findAll() {
 		return usuarioRepository.findAll();
@@ -44,17 +89,6 @@ public class UsuarioService{
 		return usuario;
 	}
 
-	/* Salva cadastro usuario */
-	public Usuario save(Usuario usuario) {
-
-		usuario.setId(sequenceGeneratorService.generateSequence(Usuario.SEQUENCE_NAME));
-		usuario.setDataCadastroUsuario(new Date());
-		usuario.setTipoUsuario(TipoUsuario.COMUM);
-		usuario.setSenhaUsuario(passwordEncoder.encode(usuario.getSenhaUsuario()));
-		//usuario.setLogadoUsuario(false);
-		Usuario newUsuario = usuarioRepository.save(usuario);
-		return newUsuario;
-	}
 
 
 	/* Atualiza usuario */
@@ -66,24 +100,14 @@ public class UsuarioService{
 		usuarioUpdate.setNomeUsuario(usuarioDetails.getNomeUsuario());
 		usuarioUpdate.setOcupacaoUsuario(usuarioDetails.getOcupacaoUsuario());
 		usuarioUpdate.setPermissaoDivulgacaoDadosUsuario(usuarioDetails.getPermissaoDivulgacaoDadosUsuario());
-		usuarioUpdate.setTipoUsuario(usuarioDetails.getTipoUsuario());
+		//usuarioUpdate.setTipoUsuario(usuarioDetails.getTipoUsuario());
 		usuarioUpdate.setSenhaUsuario(usuarioDetails.getSenhaUsuario());
 		usuarioUpdate.setDataAlteracaoUsuario(new Date());
 		return usuarioUpdate;
 	}
 
-	/* Busca por email e senha para validação de ususario */
-	/*public boolean loginUsuario(Usuario usuario)  {
-		List<Usuario> usuarios = usuarioRepository.findAll();
-		for (Usuario todos: usuarios) {
-			if (todos.equals(usuario)) {
-				usuario.setLogadoUsuario(true);
-				usuarioRepository.save(usuario);
-				return true;
-			}
-		}
-		return false;
-	}*/
+
+
 
 	
 
