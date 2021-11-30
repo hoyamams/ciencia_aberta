@@ -24,7 +24,7 @@ import br.com.aberta.ciencia.repository.UsuarioRepository;
 
 
 
-//@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
+
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
@@ -57,8 +57,10 @@ public class UsuarioService implements UserDetailsService {
 		}
 		//int permissao= usuario.getTipoUsuario();
 		Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-		authorities.add(new SimpleGrantedAuthority(TipoUsuario.COMUM.getDescricaoTipoUsuario()));
-
+		usuario.getTipoUsuario().forEach(tipo -> {
+			authorities.add(new SimpleGrantedAuthority(tipo.getDescricaoTipoUsuario()));
+		});
+		//authorities.add(new SimpleGrantedAuthority(descricaoTipo));
 		return new User(usuario.getEmailUsuario(),usuario.getSenhaUsuario(),authorities);
 	}
 
@@ -68,7 +70,7 @@ public class UsuarioService implements UserDetailsService {
 
 		usuario.setId(sequenceGeneratorService.generateSequence(Usuario.SEQUENCE_NAME));
 		usuario.setDataCadastroUsuario(new Date());
-		usuario.setTipoUsuario(TipoUsuario.COMUM.getCodigoTipoUsuario());
+		usuario.setTipoUsuario(Collections.singleton(TipoUsuario.COMUM));
 		usuario.setSenhaUsuario(passwordEncoder.encode(usuario.getSenhaUsuario()));
 		return usuarioRepository.save(usuario);
 	}
@@ -103,7 +105,8 @@ public class UsuarioService implements UserDetailsService {
 		//usuarioUpdate.setTipoUsuario(usuarioDetails.getTipoUsuario());
 		usuarioUpdate.setSenhaUsuario(usuarioDetails.getSenhaUsuario());
 		usuarioUpdate.setDataAlteracaoUsuario(new Date());
-		return usuarioUpdate;
+		return usuarioRepository.save(usuarioUpdate);
+		//return usuarioUpdate;
 	}
 
 

@@ -3,10 +3,10 @@ package br.com.aberta.ciencia.model;
 
 public enum TipoUsuario {
 	
-		ADMINISTRADOR(1,"ADMIN") ,
+		ADMIN(1,"ADMIN") ,
 		COMUM(2, "COMUM");
 
-	private Integer codigoTipoUsuario;
+	private int codigoTipoUsuario;
 	private String descricaoTipoUsuario;
 	
 	
@@ -25,13 +25,5 @@ public enum TipoUsuario {
 		return descricaoTipoUsuario;
 	}
 
-	public String apresentaDescricao(int codigoTipoUsuario) {
-		if (codigoTipoUsuario == 1) {
-			return "ADMIN";
-		} else if (codigoTipoUsuario == 2) {
-			return "COMUM";
-		}
-		return null;
-	}
 	
 }

@@ -57,12 +57,10 @@ public class Usuario {
 	private Date dataAlteracaoUsuario;
 	
 	
-	private int tipoUsuario ;
+	private Collection<TipoUsuario> tipoUsuario = new ArrayList<>() ;
 
 	public Usuario() {
 	}
-
-
 
 	public Usuario(String nomeUsuario, String emailUsuario, String instituicaoUsuario,String senhaUsuario, String ocupacaoUsuario, boolean permissaoDivulgacaoDadosUsuario,
 			Date dataCadastroUsuario, Date dataAlteracaoUsuario, TipoUsuario tipoUsuario) {
@@ -74,7 +72,7 @@ public class Usuario {
         this.permissaoDivulgacaoDadosUsuario = permissaoDivulgacaoDadosUsuario;
         this.dataCadastroUsuario = dataCadastroUsuario;
         this.dataAlteracaoUsuario = dataAlteracaoUsuario;
-        this.tipoUsuario = tipoUsuario.getCodigoTipoUsuario();
+        this.tipoUsuario = Collections.singleton(tipoUsuario);
     }
 
 	public long getId() {
@@ -151,12 +149,12 @@ public class Usuario {
 		this.dataAlteracaoUsuario = dataAlteracaoUsuario;
 	}
 	
-	public int getTipoUsuario() {
+	public Collection<TipoUsuario> getTipoUsuario() {
 		return tipoUsuario;
 	}
 	
 	
-	public void setTipoUsuario(int tipoUsuario) {
+	public void setTipoUsuario(Collection<TipoUsuario> tipoUsuario) {
 		this.tipoUsuario = tipoUsuario;
 	}
 	

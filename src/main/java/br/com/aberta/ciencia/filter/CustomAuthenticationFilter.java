@@ -13,6 +13,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -58,7 +59,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 .withClaim("tipoUsuario",user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
 
-        log.info("TIPO USUARIO {}"+ user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
+        //log.info("TIPO USUARIO "+ user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
         String refresh_token = JWT.create()
                 .withSubject(user.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis()+ 30 * 60 * 1000))

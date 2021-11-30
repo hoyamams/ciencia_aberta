@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
@@ -27,6 +28,7 @@ import static org.springframework.http.HttpMethod.POST;
 @EnableWebSecurity
 @Slf4j
 @RequiredArgsConstructor
+@CrossOrigin(allowCredentials = "*", allowedHeaders = "*",originPatterns = "*")
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	private final  UserDetailsService userDetailsService;
@@ -40,22 +42,25 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
 	@Override
-    protected void configure(HttpSecurity http) throws Exception {
+	protected void configure(HttpSecurity http) throws Exception {
 
 
 		// ESSAs LINHAs SERVEm PARA SETAR UM PADÃO DIFERENTE DE /LOGIN QUE É DEFAULT DO MODULO DE AUTENTICAÇÃO
-		//CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
-		//customAuthenticationFilter.setFilterProcessesUrl("/ciencia/login");
+		CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
+		customAuthenticationFilter.setFilterProcessesUrl("/user_login");
 		//fazendo isso no addFilter devo passar a variavel criada e não inicializar uma
+		http.cors();
 		http.csrf().disable();
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-		http.authorizeRequests().antMatchers("/login/**", "/usuario/**").permitAll();
-		http.authorizeRequests().antMatchers(POST, "/usuario_list/**").hasAnyAuthority("COMUM");
+		http.authorizeRequests().antMatchers("/user_login/**", "/usuario/**","/usuario_list/**","/usuario_busca/**","/usuario_update/**",
+				"/categoria/**", "/categoria_list/**", "/categoria_delete/**", "/categoria_update/**").permitAll();
+		//http.authorizeRequests().antMatchers(POST, "/usuario_list/**").hasAnyAuthority("COMUM");
 		http.authorizeRequests().anyRequest().authenticated();
-		http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
+		//http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
+		http.addFilter(customAuthenticationFilter);
 		http.addFilterBefore(new CustomAuthorizationFilter(),UsernamePasswordAuthenticationFilter.class);
 
-    }
+	}
 
 	@Bean
 	@Override

@@ -6,10 +6,13 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.TextNode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -21,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static java.util.Arrays.stream;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -32,6 +36,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+       log.info("PASSOU AQUI");
         if (request.getServletPath().equals("/login") || request.getServletPath().equals("/token/refresh")){
             filterChain.doFilter(request,response);
         }else{
@@ -44,10 +49,16 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     JWTVerifier verifier = JWT.require(algorithm).build();
                     DecodedJWT decodedJWT = verifier.verify(token);
                     String emailUsuario = decodedJWT.getSubject();
-                    String tipoUsuario = decodedJWT.getClaim("tipoUsuario").asString();
+                    String[] tipoUsuario = (decodedJWT.getClaim("tipoUsuario").asArray(String.class));
+                    log.info("TIPO USUARIO usuario {}", emailUsuario);
+                    log.info("TIPO USUARIO autoriza {}", tipoUsuario);
                     Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-                    authorities.add(new SimpleGrantedAuthority(tipoUsuario));
-                     log.info("TIPO USUARIO {}", tipoUsuario);
+                    stream(tipoUsuario).forEach(tipo ->{
+                        authorities.add(new SimpleGrantedAuthority(tipo));
+                    });
+
+                   // authorities.add(new SimpleGrantedAuthority(tipoUsuario));
+                   //  log.info("AUTHORITIES {}", authorities);
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(emailUsuario,null,authorities);
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                     filterChain.doFilter(request,response);

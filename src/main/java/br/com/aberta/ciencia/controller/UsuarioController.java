@@ -21,13 +21,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.web.bind.annotation.*;
 
 
 import br.com.aberta.ciencia.exception.ResourceNotFoundException;
@@ -57,7 +52,7 @@ public class UsuarioController {
 	}
 	
 	/** Método para localizar um usuário - módulo disponivel para o administrador*/
-	@GetMapping("/usuario_search/{id}")
+	@GetMapping("/usuario_busca/{id}")
 	public ResponseEntity<Usuario> getUsuarioById(@PathVariable(value = "id") Long usuarioId) 
 		throws ResourceNotFoundException{
 		 Usuario usuario = usuarioService.findById(usuarioId);
@@ -110,7 +105,7 @@ public class UsuarioController {
 						.withSubject(user.getEmailUsuario())
 						.withExpiresAt(new Date(System.currentTimeMillis()+ 10 * 60 * 1000))
 						.withIssuer(request.getRequestURL().toString())
-						.withClaim("tipoUsuario", TipoUsuario.values().toString())
+						.withClaim("tipoUsuario", user.getTipoUsuario().stream().map(TipoUsuario::getDescricaoTipoUsuario).collect(Collectors.toList()))
 						.sign(algorithm);
 
 				Map<String,String> tokens = new HashMap<>();
