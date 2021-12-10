@@ -85,7 +85,7 @@ public class UsuarioService implements UserDetailsService {
 		return usuarioRepository.findAll();
 	}
 
-	/* Busca por todos um usuario especifico */
+	/* Busca por um usuario especifico */
 	public Usuario findById(Long usuarioId) throws ResourceNotFoundException {
 		Usuario usuario = usuarioRepository.findById(usuarioId).orElseThrow(() -> new ResourceNotFoundException("Usuário não localizado."));
 		return usuario;
