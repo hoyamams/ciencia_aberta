@@ -30,14 +30,14 @@ public class PerguntasController {
         return perguntasService.findAll();
     }
 
-    @GetMapping("/perguntas_busca/{id}")
+    @GetMapping("/pergunta_busca/{id}")
     public ResponseEntity<Perguntas> getPerguntaById(@PathVariable(value = "id") Long perguntaId)
             throws ResourceNotFoundException{
         Perguntas pergunta = perguntasService.findById(perguntaId);
         return ResponseEntity.ok().body(pergunta);
     }
 
-    @PutMapping("perguntas_update/{id}")
+    @PutMapping("pergunta_update/{id}")
     public ResponseEntity<Perguntas> UpdatePergunta(@PathVariable(value = "id") Long perguntaId,
                                                  @RequestBody Perguntas perguntaDetails) throws ResourceNotFoundException {
 

@@ -53,7 +53,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.csrf().disable();
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.authorizeRequests().antMatchers("/user_login/**", "/usuario/**","/usuario_list/**","/usuario_busca/**","/usuario_update/**",
-				"/perguntas/**","/perguntas_list/**","/perguntas_busca/**","/perguntas_update/**","/perguntas_delete/**",
+				"/perguntas/**","/perguntas_list/**","/pergunta_busca/**","/pergunta_update/**","/perguntas_delete/**",
 				"/categoria/**", "/categoria_list/**", "/categoria_delete/**", "/categoria_update/**", "/categoria_busca/**").permitAll();
 		//http.authorizeRequests().antMatchers(POST, "/usuario_list/**").hasAnyAuthority("COMUM");
 		http.authorizeRequests().anyRequest().authenticated();
