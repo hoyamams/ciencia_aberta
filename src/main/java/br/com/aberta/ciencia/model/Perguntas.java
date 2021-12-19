@@ -81,4 +81,9 @@ public class Perguntas {
  public void setRespostasPossiveisPergunta(ArrayList<RespostasPossiveis> respostasPossiveisPergunta) {
   this.respostasPossiveisPergunta = respostasPossiveisPergunta;
  }
+
+ /*public CategoriaPergunta getPerguntasCategorias(Long idCategoria){
+      CategoriaPergunta categoriaPergunta = new CategoriaPergunta().ge
+ }*/
+
 }

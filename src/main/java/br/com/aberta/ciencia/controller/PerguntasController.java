@@ -1,6 +1,7 @@
 package br.com.aberta.ciencia.controller;
 
 import br.com.aberta.ciencia.exception.ResourceNotFoundException;
+import br.com.aberta.ciencia.model.CategoriaPergunta;
 import br.com.aberta.ciencia.model.Perguntas;
 import br.com.aberta.ciencia.model.Usuario;
 import br.com.aberta.ciencia.service.PerguntasService;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -50,6 +52,11 @@ public class PerguntasController {
     public ResponseEntity <?> DeletePergunta(@PathVariable (value = "id") Long perguntaId) throws ResourceNotFoundException{
         URI uri = java.net.URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/perguntas_delete").toUriString());
         return ResponseEntity.created(uri).body(perguntasService.delete(perguntaId));
+    }
+
+    @GetMapping("/perguntas_categoria")
+    public List<Perguntas> getPerguntaCategoria(@RequestParam("idCategoria") Long idCategoria){
+        return perguntasService.findByPerguntasCategoria(idCategoria);
     }
 
 

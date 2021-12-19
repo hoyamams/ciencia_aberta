@@ -72,6 +72,7 @@ public class UsuarioService implements UserDetailsService {
 		usuario.setDataCadastroUsuario(new Date());
 		usuario.setTipoUsuario(Collections.singleton(TipoUsuario.COMUM));
 		usuario.setSenhaUsuario(passwordEncoder.encode(usuario.getSenhaUsuario()));
+		System.out.println(usuario);
 		return usuarioRepository.save(usuario);
 	}
 
