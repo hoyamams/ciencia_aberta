@@ -22,9 +22,6 @@ import br.com.aberta.ciencia.model.TipoUsuario;
 import br.com.aberta.ciencia.model.Usuario;
 import br.com.aberta.ciencia.repository.UsuarioRepository;
 
-
-
-
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
@@ -60,9 +57,11 @@ public class UsuarioService implements UserDetailsService {
 		usuario.getTipoUsuario().forEach(tipo -> {
 			authorities.add(new SimpleGrantedAuthority(tipo.getDescricaoTipoUsuario()));
 		});
+		log.info(String.valueOf(authorities));
 		//authorities.add(new SimpleGrantedAuthority(descricaoTipo));
 		return new User(usuario.getEmailUsuario(),usuario.getSenhaUsuario(),authorities);
 	}
+
 
 
 	/* Salva cadastro usuario */
@@ -92,6 +91,12 @@ public class UsuarioService implements UserDetailsService {
 		return usuario;
 	}
 
+	/* Busca por um usuario especifico */
+	public Usuario getUsuarioByEmail(String usuarioEmail) throws ResourceNotFoundException {
+		Usuario usuario = usuarioRepository.findByEmailUsuario(usuarioEmail);
+		return usuario;
+	}
+
 
 
 	/* Atualiza usuario */
@@ -104,7 +109,7 @@ public class UsuarioService implements UserDetailsService {
 		usuarioUpdate.setOcupacaoUsuario(usuarioDetails.getOcupacaoUsuario());
 		usuarioUpdate.setPermissaoDivulgacaoDadosUsuario(usuarioDetails.getPermissaoDivulgacaoDadosUsuario());
 		//usuarioUpdate.setTipoUsuario(usuarioDetails.getTipoUsuario());
-		usuarioUpdate.setSenhaUsuario(usuarioDetails.getSenhaUsuario());
+		//usuarioUpdate.setSenhaUsuario(usuarioDetails.getSenhaUsuario());
 		usuarioUpdate.setDataAlteracaoUsuario(new Date());
 		return usuarioRepository.save(usuarioUpdate);
 		//return usuarioUpdate;

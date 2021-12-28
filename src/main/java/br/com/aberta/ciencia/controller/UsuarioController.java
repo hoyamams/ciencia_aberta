@@ -58,6 +58,14 @@ public class UsuarioController {
 		 Usuario usuario = usuarioService.findById(usuarioId);
 		 return ResponseEntity.ok().body(usuario);
 	}
+
+
+	@GetMapping("/usuario_busca_login/{email}")
+	public ResponseEntity<Usuario> getUsuarioByEmail(@PathVariable(value = "email") String emailUsuario)
+			throws ResourceNotFoundException{
+		Usuario usuario = usuarioService.getUsuarioByEmail(emailUsuario);
+		return ResponseEntity.ok().body(usuario);
+	}
 	
 
 	

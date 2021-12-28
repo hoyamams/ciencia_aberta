@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,14 +22,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.*;
 
 @Configuration
 @EnableWebSecurity
 @Slf4j
 @RequiredArgsConstructor
-@CrossOrigin(allowCredentials = "*", allowedHeaders = "*",originPatterns = "*")
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	private final  UserDetailsService userDetailsService;
@@ -49,14 +48,31 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
 		customAuthenticationFilter.setFilterProcessesUrl("/user_login");
 		//fazendo isso no addFilter devo passar a variavel criada e não inicializar uma
-		http.cors();
-		http.csrf().disable();
+
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+		http.authorizeRequests()
+				//.antMatchers(HttpMethod.OPTIONS, "/topicos").permitAll()
+				//.antMatchers(HttpMethod.GET, "/topicos").permitAll()
+				.antMatchers(HttpMethod.POST, "/user_login/**","/usuario/**").permitAll()
+				.antMatchers(HttpMethod.PUT, "/user_login/**", "/categoria_update/**","/usuario_update/**","/perguntas_update/**","/grau_maturidade_update/**").permitAll()
+				.antMatchers(HttpMethod.OPTIONS, "/user_login/**").permitAll()
+				.antMatchers(HttpMethod.GET, "/user_login/**", "/**","/usuario/**", "/usuario_busca_login/**").permitAll()
+				.antMatchers(HttpMethod.GET, "/**", "/perguntas/**").permitAll()
+				.antMatchers(HttpMethod.DELETE, "/categoria_delete/**","perguntas_delete","usuario_delete","grau_maturidade_delete").permitAll()
+				.and().cors().and().csrf().disable();
+
+	/*	http.cors().disable();
+		http.csrf().disable();
+
 		http.authorizeRequests().antMatchers("/user_login/**", "/usuario/**","/usuario_list/**","/usuario_busca/**","/usuario_update/**",
 				"/perguntas/**","/perguntas_list/**","/pergunta_busca/**","/pergunta_update/**","/perguntas_delete/**", "/perguntas_categoria/**", "/respostas/**",
 				"/grau_maturidade/**", "/grau_maturidade_list/**", "/grau_maturidade_delete/**", "/grau_maturidade_update/**", "/grau_maturidade_busca/**",
-				"/categoria/**", "/categoria_list/**", "/categoria_delete/**", "/categoria_update/**", "/categoria_busca/**").permitAll();
-		//http.authorizeRequests().antMatchers(POST, "/usuario_list/**").hasAnyAuthority("COMUM");
+				"/categoria/**", "/categoria_list/**", "/categoria_delete/**", "/categoria_update/**", "/categoria_busca/**").permitAll();*/
+		http.authorizeRequests().antMatchers(GET,
+				"/usuario_list/**","/perguntas_list/**", "/grau_maturidade_list/**","/categoria_list/**").hasAnyAuthority("COMUM");
+		http.authorizeRequests().antMatchers(POST,
+				"/categoria/**").hasAnyAuthority("COMUM");
 		http.authorizeRequests().anyRequest().authenticated();
 		//http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
 		http.addFilter(customAuthenticationFilter);
