@@ -54,7 +54,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 				//.antMatchers(HttpMethod.OPTIONS, "/topicos").permitAll()
 				//.antMatchers(HttpMethod.GET, "/topicos").permitAll()
-				.antMatchers(HttpMethod.POST, "/user_login/**","/usuario/**").permitAll()
+				.antMatchers(HttpMethod.POST, "/user_login/**","/usuario/**","/respostas/**","/grau_maturidade/**").permitAll()
 				.antMatchers(HttpMethod.PUT, "/user_login/**", "/categoria_update/**","/usuario_update/**","/perguntas_update/**","/grau_maturidade_update/**").permitAll()
 				.antMatchers(HttpMethod.OPTIONS, "/user_login/**").permitAll()
 				.antMatchers(HttpMethod.GET, "/user_login/**", "/**","/usuario/**", "/usuario_busca_login/**").permitAll()
@@ -70,9 +70,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				"/grau_maturidade/**", "/grau_maturidade_list/**", "/grau_maturidade_delete/**", "/grau_maturidade_update/**", "/grau_maturidade_busca/**",
 				"/categoria/**", "/categoria_list/**", "/categoria_delete/**", "/categoria_update/**", "/categoria_busca/**").permitAll();*/
 		http.authorizeRequests().antMatchers(GET,
-				"/usuario_list/**","/perguntas_list/**", "/grau_maturidade_list/**","/categoria_list/**").hasAnyAuthority("COMUM");
+				"/usuario_list/**","/perguntas_list/**", "/grau_maturidade_list/**","/categoria_list/**").hasAnyAuthority("ADMIN");
 		http.authorizeRequests().antMatchers(POST,
-				"/categoria/**").hasAnyAuthority("COMUM");
+				"/categoria/**").hasAnyAuthority("ADMIN");
 		http.authorizeRequests().anyRequest().authenticated();
 		//http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
 		http.addFilter(customAuthenticationFilter);

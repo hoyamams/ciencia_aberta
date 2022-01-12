@@ -1,5 +1,7 @@
 package br.com.aberta.ciencia.controller;
 
+import br.com.aberta.ciencia.exception.ResourceNotFoundException;
+import br.com.aberta.ciencia.model.GrauMaturidade;
 import br.com.aberta.ciencia.model.Perguntas;
 import br.com.aberta.ciencia.model.Respostas;
 import br.com.aberta.ciencia.service.RespostasService;
@@ -12,10 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.awt.image.ImageProducer;
 import java.lang.reflect.Array;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/")
@@ -25,13 +24,16 @@ public class RespostasController {
     private RespostasService respostasService;
 
     @PostMapping("/respostas")
-    public ResponseEntity<Respostas> createResposta(@RequestBody Map<String,Object> respostas) {
+    public ResponseEntity<Respostas> createResposta(@RequestBody HashMap<String,Object> respostas) throws ResourceNotFoundException {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/respostas").toUriString());
-        Respostas montaResposta = new Respostas();
-        ArrayList minhasrespostas = new ArrayList(respostas.values());
-        montaResposta.setIdUsuario( Long.valueOf((String)minhasrespostas.get(0)));
-        montaResposta.setRespostasUsuario((ArrayList) minhasrespostas.get(1));
-        return ResponseEntity.created(uri).body(respostasService.save(montaResposta));
+       return ResponseEntity.created(uri).body(respostasService.save(respostas));
+    }
+
+
+    //lista respostas
+    @GetMapping("/respostas_list")
+    public List<Respostas> getAllRespostas(){
+        return respostasService.findAll();
     }
 
 }
