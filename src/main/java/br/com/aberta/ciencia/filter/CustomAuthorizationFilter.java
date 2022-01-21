@@ -20,6 +20,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -37,7 +38,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
        log.info("PASSOU AQUI");
-        if (request.getServletPath().equals("/login") || request.getServletPath().equals("/token/refresh")){
+        if (request.getServletPath().equals("/user_login") || request.getServletPath().equals("/token/refresh")){
             filterChain.doFilter(request,response);
         }else{
             String authorizationHeader = request.getHeader(AUTHORIZATION);
@@ -58,7 +59,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     });
 
                    // authorities.add(new SimpleGrantedAuthority(tipoUsuario));
-                   //  log.info("AUTHORITIES {}", authorities);
+                    log.info("AUTHORITIES {}", authorities);
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(emailUsuario,null,authorities);
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                     filterChain.doFilter(request,response);
@@ -70,6 +71,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     error.put("error_message", exception.getMessage());
                     response.setContentType(APPLICATION_JSON_VALUE);
                     new ObjectMapper().writeValue(response.getOutputStream(),error);
+                    response.encodeRedirectURL("/user_login");
 
                 }
 

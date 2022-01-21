@@ -36,4 +36,21 @@ public class RespostasController {
         return respostasService.findAll();
     }
 
+    //pesquisa usuario
+    @GetMapping("/pesquisa_usuario/{id}")
+    public ResponseEntity<Respostas> getRespostaUsuario(@PathVariable(value = "id") Long idUsuario)throws ResourceNotFoundException{
+        Respostas respostas = respostasService.findRespostaUsuario(idUsuario);
+        return ResponseEntity.ok().body(respostas);
+    }
+
+    @PutMapping("pergunta_update_divulga/{id}")
+    public ResponseEntity<Respostas> UpdatePerguntaDivulga(@PathVariable(value = "id") Long usuarioId,
+                                                    @RequestBody Boolean divulgaPesquisa)  throws ResourceNotFoundException {
+
+        System.out.println("aqui "+divulgaPesquisa);
+        final Respostas updateResposta = respostasService.updateDivulgaCadastro(usuarioId, divulgaPesquisa);
+        return ResponseEntity.ok(updateResposta);
+
+    }
+
 }

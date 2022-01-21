@@ -54,7 +54,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
         String access_token = JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis()+ 10 * 60 * 1000))
+                .withExpiresAt(new Date(System.currentTimeMillis()+ 10 * 1000 * 1000))
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("tipoUsuario",user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
@@ -62,7 +62,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         //log.info("TIPO USUARIO "+ user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
         String refresh_token = JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis()+ 30 * 60 * 1000))
+                .withExpiresAt(new Date(System.currentTimeMillis()+ 30 * 1000 * 1000))
                 .withIssuer(request.getRequestURL().toString())
                 .sign(algorithm);
 

@@ -2,6 +2,7 @@ package br.com.aberta.ciencia.service;
 
 import java.util.*;
 
+import br.com.aberta.ciencia.model.Respostas;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,8 @@ public class UsuarioService implements UserDetailsService {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 
+	@Autowired
+	private RespostasService respostasService;
 
 	private TipoUsuario tipoUsuario;
 
@@ -101,18 +104,17 @@ public class UsuarioService implements UserDetailsService {
 
 	/* Atualiza usuario */
 	public Usuario update(Long usuarioId, Usuario usuarioDetails) throws ResourceNotFoundException {
-		
+
+		Respostas respostas = respostasService.updateDivulgaCadastro(usuarioId,usuarioDetails.getPermissaoDivulgacaoDadosUsuario());
+
 		Usuario usuarioUpdate = findById(usuarioId);
 		usuarioUpdate.setEmailUsuario(usuarioDetails.getEmailUsuario());
 		usuarioUpdate.setInstituicaoUsuario(usuarioDetails.getInstituicaoUsuario());
 		usuarioUpdate.setNomeUsuario(usuarioDetails.getNomeUsuario());
 		usuarioUpdate.setOcupacaoUsuario(usuarioDetails.getOcupacaoUsuario());
 		usuarioUpdate.setPermissaoDivulgacaoDadosUsuario(usuarioDetails.getPermissaoDivulgacaoDadosUsuario());
-		//usuarioUpdate.setTipoUsuario(usuarioDetails.getTipoUsuario());
-		//usuarioUpdate.setSenhaUsuario(usuarioDetails.getSenhaUsuario());
 		usuarioUpdate.setDataAlteracaoUsuario(new Date());
 		return usuarioRepository.save(usuarioUpdate);
-		//return usuarioUpdate;
 	}
 
 
