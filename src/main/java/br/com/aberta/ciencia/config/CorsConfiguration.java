@@ -14,7 +14,7 @@ public class CorsConfiguration implements WebMvcConfigurer{
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:3000")
-                .allowedOrigins("https://fierce-hollows-92158.herokuapp.com/")
+                .allowedOrigins("https://cienciaabertaapp.herokuapp.com/")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT");
              //   .allowedHeaders("Authorization", "Content-Type", "Access-Control-Allow-Origin", "Origin", "X-Auth-Token")
             //    .allowCredentials(false)
