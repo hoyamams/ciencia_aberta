@@ -36,7 +36,7 @@ public class GlossarioService {
 
     //lista todas categorias
     public List<Glossario> findAll(){
-        return glossarioRepository.findAllByOrderById();
+        return glossarioRepository.findAllByOrderByDescricaoGlossario();
     }
 
 //busca id categoria

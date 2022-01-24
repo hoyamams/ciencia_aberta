@@ -34,7 +34,7 @@ public class ReferenciasService {
 
     //lista todas categorias
     public List<Referencias> findAll(){
-        return referenciasRepository.findAllByOrderById();
+        return referenciasRepository.findAllByOrderByDescricaoReferencias();
     }
 
 //busca id categoria

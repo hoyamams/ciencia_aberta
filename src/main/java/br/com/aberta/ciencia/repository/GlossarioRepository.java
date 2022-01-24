@@ -9,6 +9,6 @@ import java.util.List;
 public interface GlossarioRepository extends MongoRepository<Glossario, Long> {
 
 
-    List<Glossario> findAllByOrderById();
+    List<Glossario> findAllByOrderByDescricaoGlossario();
 
 }

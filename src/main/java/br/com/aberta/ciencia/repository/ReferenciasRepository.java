@@ -9,6 +9,6 @@ import java.util.List;
 public interface ReferenciasRepository extends MongoRepository<Referencias, Long> {
 
 
-    List<Referencias> findAllByOrderById();
+    List<Referencias> findAllByOrderByDescricaoReferencias();
 
 }
