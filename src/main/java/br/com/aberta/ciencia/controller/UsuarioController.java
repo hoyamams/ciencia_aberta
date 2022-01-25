@@ -46,13 +46,13 @@ public class UsuarioController {
 	}
 	
 	/** Método para listar todos os usuários - módulo disponivel para o administrador*/
-	@GetMapping("/usuario_list")
+	@GetMapping("usuario_list")
 	public List<Usuario> getAllUsuario(){
 		return usuarioService.findAll();
 	}
 	
 	/** Método para localizar um usuário - módulo disponivel para o administrador*/
-	@GetMapping("/usuario_busca/{id}")
+	@GetMapping("usuario_busca/{id}")
 	public ResponseEntity<Usuario> getUsuarioById(@PathVariable(value = "id") Long usuarioId) 
 		throws ResourceNotFoundException{
 		 Usuario usuario = usuarioService.findById(usuarioId);
@@ -60,7 +60,7 @@ public class UsuarioController {
 	}
 
 
-	@GetMapping("/usuario_busca_login/{email}")
+	@GetMapping("usuario_busca_login/{email}")
 	public ResponseEntity<Usuario> getUsuarioByEmail(@PathVariable(value = "email") String emailUsuario)
 			throws ResourceNotFoundException{
 		Usuario usuario = usuarioService.getUsuarioByEmail(emailUsuario);
