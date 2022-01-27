@@ -11,4 +11,6 @@ public interface PerguntasRepository extends MongoRepository<Perguntas,Long> {
    List<Perguntas> findByCategoria_IdOrderById(Long idCategoria);
 
 
+
+
 }

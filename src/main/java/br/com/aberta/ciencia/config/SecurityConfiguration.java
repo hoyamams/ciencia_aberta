@@ -52,14 +52,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		//http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http
 				.authorizeRequests()
-				.antMatchers("/user_login/**","/usuario/**","/respostas/**","/email_send/**","/respostas_list/**",
+				.antMatchers("/user_login/**","/usuario/**","/respostas/**","/email_send/**","/respostas_list/**","/usuario_busca/**",
 						"/usuario_busca_login/**","/categoria_list/**","/pesquisa_usuario/**", "/perguntas_list/**","/perguntas_categoria/**",
-						"/glossario_list/**","/apresentacao_list/**","/referencias_list/**").permitAll()
-				.antMatchers("/usuario_busca/**","/usuario_update/**", "/pergunta_update_divulga/**","/token/refresh/**").hasAnyAuthority("COMUM","ADMIN")
+						"/glossario_list/**","/apresentacao_list/**","/referencias_list/**","/grau_maturidade_busca/**").permitAll()
+				.antMatchers("/usuario_update/**", "/pergunta_update_divulga/**","/token/refresh/**").hasAnyAuthority("COMUM","ADMIN")
 				.antMatchers(
 						"/usuario_list/**","/usuario_delete/**",
-						"/grau_maturidade/**","/grau_maturidade_update/**","/grau_maturidade_delete/**","/grau_maturidade_busca/**","/grau_maturidade_list/**",
-						"/perguntas/**","/pergunta_update/**",  "/pergunta_busca/**",
+						"/grau_maturidade/**","/grau_maturidade_update/**","/grau_maturidade_delete/**","/grau_maturidade_list/**",
+						"/perguntas/**","/pergunta_update/**",  "/pergunta_busca/**","/pergunta_delete/**",
 						"/categoria/**","/categoria_update/**", "/categoria_delete/**","/categoria_busca/**",
 						"/glossario/**","/glossario_update/**", "/glossario_delete/**","/glossario_busca/**",
 						"/apresentacao/**","/apresentacao_update/**", "/apresentacao_delete/**","/apresentacao_busca/**",

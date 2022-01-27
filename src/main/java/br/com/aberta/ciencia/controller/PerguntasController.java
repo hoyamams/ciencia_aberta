@@ -48,9 +48,9 @@ public class PerguntasController {
 
     }
     //Deleta Categoria
-    @DeleteMapping("perguntas_delete/{id}")
+    @DeleteMapping("pergunta_delete/{id}")
     public ResponseEntity <?> DeletePergunta(@PathVariable (value = "id") Long perguntaId) throws ResourceNotFoundException{
-        URI uri = java.net.URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/perguntas_delete").toUriString());
+        URI uri = java.net.URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/pergunta_delete").toUriString());
         return ResponseEntity.created(uri).body(perguntasService.delete(perguntaId));
     }
 
