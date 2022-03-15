@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.message.StringFormattedMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -117,6 +118,14 @@ public class UsuarioService implements UserDetailsService {
 		return usuarioRepository.save(usuarioUpdate);
 	}
 
+	//Deleta usuario
+	public ResponseEntity<?> delete(Long usuarioId) throws ResourceNotFoundException {
+		return usuarioRepository.findById(usuarioId)
+				.map(record -> {
+					usuarioRepository.deleteById(usuarioId);
+					return ResponseEntity.ok().build();
+				}).orElse(ResponseEntity.notFound().build());
+	}
 
 	
 

@@ -78,6 +78,12 @@ public class UsuarioController {
 	    return ResponseEntity.ok(updateUsuario);
 	    
 	  }
+	//Deleta grau
+	@DeleteMapping("usuario_delete/{id}")
+	public ResponseEntity <?> DeleteUsuario(@PathVariable (value = "id") Long usuarioId) throws ResourceNotFoundException{
+		URI uri = java.net.URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/usuario_delete").toUriString());
+		return ResponseEntity.created(uri).body(usuarioService.delete(usuarioId));
+	}
 		
 	/** Método cadastra usuário - acessivel para todos os usuários
 	 * @return*/
