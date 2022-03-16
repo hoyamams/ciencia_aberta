@@ -120,6 +120,7 @@ public class UsuarioService implements UserDetailsService {
 
 	//Deleta usuario
 	public ResponseEntity<?> delete(Long usuarioId) throws ResourceNotFoundException {
+		respostasService.updateDivulgaCadastro(usuarioId, false);
 		return usuarioRepository.findById(usuarioId)
 				.map(record -> {
 					usuarioRepository.deleteById(usuarioId);
