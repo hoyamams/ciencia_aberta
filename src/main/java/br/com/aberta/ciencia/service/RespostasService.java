@@ -104,7 +104,7 @@ public class RespostasService {
                                                 // valorAlternativa = idAlternativa+1;
                                                 valorAlternativa = 1;
                                             }else{
-                                                if ((pergunta.getRespostasPossiveisPergunta().size() == 0) || (pergunta.getRespostasPossiveisPergunta().size() == 1) ) {
+                                                if ((idAlternativa == 0) || (idAlternativa == 1) ) {
                                                    valorAlternativa = 0;
                                                 }else{
                                                     valorAlternativa = 0.5;
